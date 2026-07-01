@@ -18,14 +18,14 @@ class URLMap(db.Model):
             f'short={self.short}, timestamp={self.timestamp}>'
         )
 
-    def to_dict(self):
-        return {
-            'short_link':
-                url_for('get_url', short_id=self.short, _external=True),
-            'url': self.original,
-        }
+    # def to_dict(self):
+    #     return {
+    #         'short_link':
+    #             url_for('get_url', short_id=self.short, _external=True),
+    #         'url': self.original,
+    #     }
 
-    def from_dict(self, data):
-        for field in ['original', 'short']:
-            if field in data:
-                setattr(self, field, data[field])
+    # def from_dict(self, data):
+    #     for field in ['original', 'short']:
+    #         if field in data:
+    #             setattr(self, field, data[field])
