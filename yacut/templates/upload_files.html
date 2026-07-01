@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Загрузка файлов - YaCut{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Загрузка файлов на YaCut</h1>
+<p class="text-center my-4">Поделитесь своими файлами с помощью короткой ссылки</p>
+
+<div class="container">
+  <div class="row justify-content-center my-3">
+    <div class="col-md-8 col-lg-6">
+      <form method="POST" action="/upload" enctype="multipart/form-data">
+        <div class="form-group">
+          <input type="file" name="file" class="form-control-file" id="fileInput" required>
+          {% if errors and errors.file %}
+            <p class="text-danger mt-1">{{ errors.file[0] }}</p>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-success btn-block btn-lg">Загрузить файл</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

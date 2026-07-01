@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Главная - YaCut{% endblock %}
+
+{% block content %}
+<h1 class="text-center"><span style="color:red">Ya</span>Cut</h1>
+<p class="text-center my-4">Создайте короткую ссылку автоматически или предложите свой вариант</p>
+
+<div class="container">
+  <div class="row justify-content-center my-3">
+    <div class="col-md-8 col-lg-6">
+      <form method="POST" action="/create">
+        <div class="form-group">
+          <input type="text" name="long_url" class="form-control form-control-lg py-2 mb-3"
+                 placeholder="Длинная ссылка" value="{% if form_data %}{{ form_data.long_url }}{% endif %}" required>
+          {% if errors and errors.long_url %}
+            <p class="text-danger mt-1">{{ errors.long_url[0] }}</p>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <input type="text" name="short_slug" class="form-control form-control-lg py-2 mb-3"
+                 placeholder="Ваш вариант короткой ссылки (опционально)"
+                 value="{% if form_data %}{{ form_data.short_slug }}{% endif %}">
+          {% if errors and errors.short_slug %}
+            <p class="text-danger mt-1">{{ errors.short_slug[0] }}</p>
+          {% endif %}
+        </div>
+        <input type="submit" class="btn btn-primary btn-block btn-lg" value="Создать">
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5 text-center">
+  <h5>Пример информационного сообщения</h5>
+</div>
+{% endblock %}
