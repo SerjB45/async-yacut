@@ -6,13 +6,14 @@ from sqlalchemy.exc import OperationalError
 from . import db
 from .models import URLMap
 
+ALLOWED_CHARS = string.ascii_letters + string.digits
+
 
 def get_unique_short_id(length=6):
-    alphabet = string.ascii_letters + string.digits
     reserved_ids = {'files'}
 
     while True:
-        short_id = ''.join(random.choice(alphabet) for _ in range(length))
+        short_id = ''.join(random.choice(ALLOWED_CHARS) for _ in range(length))
         if short_id in reserved_ids:
             continue
         if not is_short_id_exists(short_id):
@@ -38,8 +39,7 @@ def is_valid_custom_short_id(custom_id):
     if is_short_id_exists(custom_id):
         return False
 
-    allowed_chars = set(string.ascii_letters + string.digits)
-    if not all(c in allowed_chars for c in custom_id):
+    if not all(c in ALLOWED_CHARS for c in custom_id):
         return False
 
     return True

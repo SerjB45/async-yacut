@@ -5,20 +5,26 @@
 {% block content %}
 <h1 class="text-center">Загрузка файлов на YaCut</h1>
 <p class="text-center my-4">Поделитесь своими файлами с помощью короткой ссылки</p>
-
-<div class="container">
-  <div class="row justify-content-center my-3">
-    <div class="col-md-8 col-lg-6">
-      <form method="POST" action="/upload" enctype="multipart/form-data">
-        <div class="form-group">
-          <input type="file" name="file" class="form-control-file" id="fileInput" required>
-          {% if errors and errors.file %}
-            <p class="text-danger mt-1">{{ errors.file[0] }}</p>
-          {% endif %}
-        </div>
-        <button type="submit" class="btn btn-success btn-block btn-lg">Загрузить файл</button>
-      </form>
+<form method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.files.label(class="form-label") }}
+        {{ form.files(class="form-control", multiple=true) }}
+        {% for error in form.files.errors %}
+            <small class="text-danger">{{ error }}</small>
+        {% endfor %}
     </div>
-  </div>
-</div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+
+{% if uploaded_files %}
+    <h2 class="mt-4">Загруженные файлы</h2>
+    <ul class="list-unstyled">
+        {% for name, link in uploaded_files %}
+            <li class="mb-2">
+                <strong>{{ name }}:</strong> <a href="{{ link }}">{{ link }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% endblock %}

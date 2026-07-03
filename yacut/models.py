@@ -1,7 +1,5 @@
 from datetime import datetime, timezone
 
-from flask import url_for
-
 from yacut import db
 
 
@@ -17,15 +15,3 @@ class URLMap(db.Model):
             f'<URLMap id={self.id}, original={self.original}, '
             f'short={self.short}, timestamp={self.timestamp}>'
         )
-
-    # def to_dict(self):
-    #     return {
-    #         'short_link':
-    #             url_for('get_url', short_id=self.short, _external=True),
-    #         'url': self.original,
-    #     }
-
-    # def from_dict(self, data):
-    #     for field in ['original', 'short']:
-    #         if field in data:
-    #             setattr(self, field, data[field])
