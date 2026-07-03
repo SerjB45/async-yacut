@@ -5,11 +5,8 @@ from flask import jsonify, request
 from . import app, db
 from .error_handlers import InvalidAPIUsage
 from .models import URLMap
-from .utils import (
-    get_unique_short_id,
-    is_valid_custom_short_id,
-    is_short_id_exists
-)
+from .utils import (get_unique_short_id, is_short_id_exists,
+                    is_valid_custom_short_id)
 
 
 @app.route('/api/id/<short_id>', methods=('GET',))

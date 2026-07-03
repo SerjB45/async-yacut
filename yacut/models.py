@@ -1,5 +1,7 @@
 from datetime import datetime, timezone
 
+from flask import url_for
+
 from yacut import db
 
 
@@ -15,3 +17,6 @@ class URLMap(db.Model):
             f'<URLMap id={self.id}, original={self.original}, '
             f'short={self.short}, timestamp={self.timestamp}>'
         )
+
+    def get_short_url(self):
+        return url_for('short_link_redirect', short=self.short, _external=True)

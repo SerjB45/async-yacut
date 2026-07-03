@@ -3,9 +3,10 @@ from http import HTTPStatus
 from flask import flash, redirect, render_template
 
 from . import app, db
+from .forms import ShortUrlForm, UploadFileForm
 from .models import URLMap
-from .forms import UploadFileForm, ShortUrlForm
-from .upload_file_to_ya_disk import async_upload_file_to_yandex_disk
+from .utils import (get_unique_short_id, is_short_id_exists,
+                    is_valid_custom_short_id)
 
 
 @app.route('/<short>', methods=('GET',), endpoint='short_link_redirect')
@@ -22,38 +23,37 @@ def index_view():
     short_url = None
     if form.validate_on_submit():
         original_link = form.original_link.data
-        custom_id = form.custom_id.data or None
+        custom_id = form.custom_id.data
 
-        if custom_id and URLMap.query.filter_by(short=custom_id).first():
-            flash('Пользовательский короткий идентификатор уже существует. '
-                  'Пожалуйста, выберите другой.')
-            return render_template('index.html', form=form)
+        # Handle empty custom_id
+        if custom_id is not None and not custom_id:
+            custom_id = None
 
-        url_map = URLMap(original=original_link, short=custom_id)
+        # Validate custom_id if provided
+        if custom_id is not None:
+            # Check for reserved or duplicate IDs
+            if custom_id == 'files' or is_short_id_exists(custom_id):
+                flash('Предложенный вариант короткой ссылки уже существует.')
+                return render_template('index.html', form=form)
+
+            # Check for invalid format (length, characters)
+            if not is_valid_custom_short_id(custom_id):
+                return render_template('index.html', form=form)
+
+        # Generate short_id if not provided
+        short_id = custom_id if custom_id is not None else get_unique_short_id()
+
+        # Create URLMap entry
+        url_map = URLMap(original=original_link, short=short_id)
         db.session.add(url_map)
         db.session.commit()
         short_url = url_map.get_short_url()
+
     return render_template('index.html', form=form, short_url=short_url)
 
 
 @app.route('/files', methods=('GET', 'POST'), endpoint='upload_file_view')
 def upload_file_view():
     form = UploadFileForm()
-    if form.validate_on_submit():
-        try:
-            urls = async_upload_file_to_yandex_disk(form.files.data)
-            return render_template(
-                'upload_files.html',
-                form=form,
-                uploaded_files=[
-                    {
-                        'name': file.filename,
-                        'link': URLMap.create(original=url).get_short_url()
-                    }
-                    for file, url in zip(form.files.data, urls)
-                ]
-            )
-        except Exception as e:
-            flash(f'Ошибка при загрузке файлов: {str(e)}')
-            return render_template('upload_files.html', form=form)
+
     return render_template('upload_files.html', form=form)

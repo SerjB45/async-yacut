@@ -11,7 +11,8 @@ class UploadFileForm(FlaskForm):
     )
 
     submit = SubmitField('Загрузить')
-    
+
+
 class ShortUrlForm(FlaskForm):
     original_link = StringField(
         'Введите URL для сокращения',
@@ -20,4 +21,4 @@ class ShortUrlForm(FlaskForm):
     custom_id = StringField(
         'Введите пользовательский короткий идентификатор (необязательно)'
     )
-    submit = SubmitField('Сократить')    
+    submit = SubmitField('Сократить')
