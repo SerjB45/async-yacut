@@ -1,7 +1,7 @@
 import asyncio
+from urllib.parse import quote
 
 import aiohttp
-from urllib.parse import quote
 
 from . import app
 
@@ -17,7 +17,7 @@ AUTH_HEADERS = {'Authorization': f'OAuth {DISK_TOKEN}'}
 async def upload_file_and_get_link(session, file):
     filename = file.filename
     payload = {
-        'path': f'app:/{quote(filename)}',
+        'path': f'app:/{quote(filename)}',  # noqa E231
         'overwrite': 'true'
     }
     file_content = file.read()
@@ -38,7 +38,7 @@ async def upload_file_and_get_link(session, file):
     async with session.get(
         DOWNLOAD_LINK_URL,
         headers=AUTH_HEADERS,
-        params={'path': f'app:/{filename}'}
+        params={'path': f'app:/{filename}'}  # noqa E231
     ) as download_response:
         download_response.raise_for_status()
         download_data = await download_response.json()

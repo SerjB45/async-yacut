@@ -6,9 +6,9 @@ from flask import flash, redirect, render_template
 from . import app, db
 from .forms import ShortUrlForm, UploadFileForm
 from .models import URLMap
+from .upload_file_to_ya_disk import async_upload_file_to_yandex_disk
 from .utils import (get_unique_short_id, is_short_id_exists,
                     is_valid_custom_short_id)
-from .upload_file_to_ya_disk import async_upload_file_to_yandex_disk
 
 
 @app.route('/<short>', methods=('GET',), endpoint='short_link_redirect')
