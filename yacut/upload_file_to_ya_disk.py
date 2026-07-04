@@ -7,7 +7,7 @@ from . import app
 
 DISK_HOST = app.config.get('DISK_HOST')
 DISK_API_VERSION = app.config.get('DISK_API_VERSION')
-DISK_URL = f'{DISK_HOST}/{DISK_API_VERSION}/disk/resources/'
+DISK_URL = f'{DISK_HOST}{DISK_API_VERSION}/disk/resources/'
 DISK_TOKEN = app.config.get('DISK_TOKEN')
 REQUEST_UPLOAD_URL = f'{DISK_URL}upload'
 DOWNLOAD_LINK_URL = f'{DISK_URL}download'

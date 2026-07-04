@@ -20,9 +20,9 @@
 {% if uploaded_files %}
     <h2 class="mt-4">Загруженные файлы</h2>
     <ul class="list-unstyled">
-        {% for filename, short in uploaded_files %}
+        {% for file_data in uploaded_files %}
             <li class="mb-2">
-                <strong>{{ filename }}:</strong> <a href="{{ short }}">{{ short }}</a>
+                <strong>{{ file_data.name }}:</strong> <a href="{{ file_data.short }}">{{ file_data.short }}</a>
             </li>
         {% endfor %}
     </ul>

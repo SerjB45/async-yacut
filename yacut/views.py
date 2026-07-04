@@ -1,3 +1,4 @@
+import asyncio
 from http import HTTPStatus
 
 from flask import flash, redirect, render_template
@@ -34,7 +35,10 @@ def index_view():
             if not is_valid_custom_short_id(custom_id):
                 return render_template('index.html', form=form)
 
-        short_id = custom_id if custom_id is not None else get_unique_short_id()
+        if custom_id is not None:
+            short_id = custom_id
+        else:
+            short_id = get_unique_short_id()
 
         url_map = URLMap(original=original_link, short=short_id)
         db.session.add(url_map)
@@ -49,21 +53,26 @@ def upload_file_view():
     form = UploadFileForm()
     if form.validate_on_submit():
         try:
-            file_info = await async_upload_file_to_yandex_disk(form.files.data)
-            filenames, urls = file_info
+            file_info = asyncio.run(
+                async_upload_file_to_yandex_disk(form.files.data)
+            )
             uploaded_files = []
-            for filename, url in zip(filenames, urls):
+            for file_data in file_info:
+                filename = file_data['name']
+                url = file_data['url']
                 short_id = get_unique_short_id()
                 url_map = URLMap(original=url, short=short_id)
                 db.session.add(url_map)
-                uploaded_files.append(
-                    ({'filename': filename, 'short': url_map.get_short_url()}))
+                uploaded_files.append({
+                    'name': filename,
+                    'short': url_map.get_short_url()
+                })
             db.session.commit()
             return render_template(
                 'upload_files.html',
                 form=form,
                 uploaded_files=uploaded_files
-            )    
+            )
         except Exception as e:
             flash(f'Ошибка при загрузке файлов: {str(e)}')
             return render_template('upload_files.html', form=form)
