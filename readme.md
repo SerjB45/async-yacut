@@ -50,6 +50,7 @@ SECRET_KEY=your_secret_key
 DATABASE_URI=sqlite:///db.sqlite3
 DISK_HOST=https://cloud-api.yandex.net
 DISK_TOKEN=your_token
+DISK_API_VERSION=v1
 ```
 
 Создать базу данных и применить миграции:
