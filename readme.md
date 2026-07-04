@@ -48,7 +48,7 @@ FLASK_APP=yacut
 FLASK_ENV=development
 SECRET_KEY=your_secret_key
 DATABASE_URI=sqlite:///db.sqlite3
-DISK_HOST=https://cloud-api.yandex.net
+DISK_HOST=https://cloud-api.yandex.net/
 DISK_TOKEN=your_token
 DISK_API_VERSION=v1
 ```
