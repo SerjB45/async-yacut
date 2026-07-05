@@ -4,7 +4,7 @@ import string
 from sqlalchemy.exc import OperationalError
 
 from . import db
-from .models import URLMap, LENGTH_SHORT_URL
+from .models import LENGTH_SHORT_URL, URLMap
 
 ALLOWED_CHARS = string.ascii_letters + string.digits
 

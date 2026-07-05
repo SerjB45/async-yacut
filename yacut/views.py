@@ -27,7 +27,9 @@ def index_view():
         original_link = form.original_link.data
         custom_id = form.custom_id.data
 
-        if custom_id != '':
+        if not custom_id:
+            short_id = get_unique_short_id()
+        else:
             if custom_id == 'files' or is_short_id_exists(custom_id):
                 flash('Предложенный вариант короткой ссылки уже существует.')
                 return render_template('index.html', form=form)
@@ -35,10 +37,7 @@ def index_view():
             if not is_valid_custom_short_id(custom_id):
                 return render_template('index.html', form=form)
 
-        if custom_id != '':
             short_id = custom_id
-        else:
-            short_id = get_unique_short_id()
 
         url_map = URLMap(original=original_link, short=short_id)
         db.session.add(url_map)
