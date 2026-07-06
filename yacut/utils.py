@@ -7,6 +7,7 @@ from . import db
 from .models import LENGTH_SHORT_URL, URLMap
 
 ALLOWED_CHARS = string.ascii_letters + string.digits
+MAX_ATTEMPTS_GENERATIONS = 10
 
 
 def get_unique_short_id(length=6):
@@ -20,7 +21,7 @@ def get_unique_short_id(length=6):
             continue
         if not is_short_id_exists(short_id):
             return short_id
-        if numb_attempts > 10:
+        if numb_attempts > MAX_ATTEMPTS_GENERATIONS:
             raise TimeoutError('Ошибка при генерации короткой ссылки')
 
 
